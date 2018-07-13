@@ -5,5 +5,6 @@ public class VoteCounter {
 	public static void main(String args[]) {
 		VoteCounterUI voteCounterUI = new VoteCounterUI();
 		voteCounterUI.run();
+		
 	}
 }
