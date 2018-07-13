@@ -11,7 +11,7 @@ import com.aconex.voteCounter.Model.Ballot;
 import com.aconex.voteCounter.Model.Candidate;
 import com.aconex.voteCounter.view.VoteCounterUI;
 
-class TestVoterCounter {
+class TestVoteCounter {
 
 	CandidateManager candidateManager = new CandidateManager();
 	VoteCounterUI voteCounterUI = new VoteCounterUI();
@@ -289,5 +289,106 @@ class TestVoterCounter {
 		
 	}
 
+
+	//Test case for invalid ballot entries
+	@Test
+	void testFindWinnerInvalidInputCase() {
+		//Stage 1: Prepare test data
+		
+		Candidate winner = null;
+		ArrayList<Ballot> ballots = new ArrayList<Ballot>();
+		Ballot ballot;
+		ArrayList<Candidate> candidates ;
+		candidateManager.readCandidates("xyz.txt");
+		candidates = candidateManager.getCandidates();
+		ballot = voteCounterUI.processVotes("ACD", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		
+		ballot = voteCounterUI.processVotes("BAC", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		ballot = voteCounterUI.processVotes("BDF", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		ballot = voteCounterUI.processVotes("AFZ", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		ballot = voteCounterUI.processVotes("AFK", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		
+		
+		
+		//Stage 2: Call method
+		
+		winner = voteCounterUI.findWinner(ballots, candidates);
+		
+		//Stage 3: assert
+		if(winner!= null) {
+			assertEquals(candidates.get(1), winner);
+		}
+		else {
+			fail("Null winner. Test case failed");
+		}
+			
+		
+	}
+
 	
+	//Test case for duplicate votes
+	@Test
+	void testFindWinnerInvalidInputDuplicateVoteCase() {
+		//Stage 1: Prepare test data
+		
+		Candidate winner = null;
+		ArrayList<Ballot> ballots = new ArrayList<Ballot>();
+		Ballot ballot;
+		ArrayList<Candidate> candidates ;
+		candidateManager.readCandidates("xyz.txt");
+		candidates = candidateManager.getCandidates();
+		ballot = voteCounterUI.processVotes("ACD", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		
+		ballot = voteCounterUI.processVotes("BAC", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		ballot = voteCounterUI.processVotes("BDF", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		ballot = voteCounterUI.processVotes("AFF", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		ballot = voteCounterUI.processVotes("ADD", candidates);
+		if(ballot!=null) {
+			ballots.add(ballot);
+		}
+		
+		
+		
+		//Stage 2: Call method
+		
+		winner = voteCounterUI.findWinner(ballots, candidates);
+		
+		//Stage 3: assert
+		if(winner!= null) {
+			assertEquals(candidates.get(1), winner);
+		}
+		else {
+			fail("Null winner. Test case failed");
+		}
+			
+		
+	}
+
 }
